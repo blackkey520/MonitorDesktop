@@ -13,6 +13,8 @@ import batchsend from './batchsend';
 import settings from './settings';
 import snackbar from './snackbar';
 import confirmImagePaste from './confirmImagePaste';
+import global from './global';
+import monitorpoint from './monitorpoint';
 
 const stores = {
     session,
@@ -29,6 +31,8 @@ const stores = {
     forward,
     snackbar,
     confirmImagePaste,
+    global,
+    monitorpoint,
 };
 
 export default stores;

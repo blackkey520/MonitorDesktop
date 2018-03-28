@@ -3,10 +3,9 @@ import webpack from 'webpack';
 import MinifyPlugin from 'babel-minify-webpack-plugin';
 import config from './index';
 import baseConfig from './webpack.config.base';
+const webpackMerge = require('webpack-merge');
 
-export default {
-
-    ...baseConfig,
+module.exports = webpackMerge(baseConfig, {
 
     devtool: false,
 
@@ -42,4 +41,4 @@ export default {
         __dirname: false,
         __filename: false
     }
-};
+});

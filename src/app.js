@@ -5,7 +5,6 @@ import { Provider } from 'mobx-react';
 import { HashRouter } from 'react-router-dom';
 import ElectronCookies from '@exponent/electron-cookies';
 import { ipcRenderer } from 'electron';
-
 import './global.css';
 import './assets/fonts/icomoon/style.css';
 import 'utils/albumcolors';

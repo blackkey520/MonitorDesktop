@@ -6,10 +6,9 @@ import config from './index';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
 import baseConfig from './webpack.config.base';
+const webpackMerge = require('webpack-merge');
 
-export default {
-
-    ...baseConfig,
+module.exports = webpackMerge(baseConfig, {
 
     devtool: false,
 
@@ -22,7 +21,6 @@ export default {
         path: config.dist,
         filename: 'app.[hash].js'
     },
-
     plugins: [
         // https://github.com/webpack/webpack/issues/2545
         // Use babel-minify-webpack-plugin minify code
@@ -66,4 +64,4 @@ export default {
 
     // https://github.com/chentsulin/webpack-target-electron-renderer#how-this-module-works
     target: 'electron-renderer'
-};
+});

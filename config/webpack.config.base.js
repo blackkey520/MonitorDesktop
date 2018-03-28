@@ -26,6 +26,7 @@ export default {
                             localIdentName: '[path][name]__[local]--[hash:base64:5]'
                         },
                     },
+                    'less-loader',
                     {
                         loader: 'postcss-loader',
                         options: {
@@ -45,10 +46,30 @@ export default {
                 ],
             },
             {
+                test: /\.less$/,
+                exclude: [/icomoon\/style.css$/, /icomoon\\style.css$/, /global.css$/],
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    {
+                        loader: 'less-loader', // compiles Less to CSS
+                        options: {
+                            javascriptEnabled: true,
+                            // 这里配置全局变量
+                            globalVars: {
+                                'ten': '10px', // ten可以是ten，也可以是@ten，效果一样，下同
+                                'hundred': '100px'
+                            }
+                        }
+                    }
+                ]
+            },
+            {
                 test: /icomoon(\/|\\)style.css$/,
                 use: [
                     'style-loader',
                     'css-loader',
+                    'less-loader',
                 ],
             },
             {
@@ -56,6 +77,7 @@ export default {
                 use: [
                     'style-loader',
                     'css-loader',
+                    'less-loader',
                 ],
             },
             {
@@ -106,7 +128,7 @@ export default {
     },
 
     resolve: {
-        extensions: ['.js', '.jsx', '.json'],
+        extensions: ['.js', '.jsx', '.json', '.less'],
         alias: {
             components: path.join(config.client, 'js/components/'),
             utils: path.join(config.client, 'js/utils/'),

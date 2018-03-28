@@ -1,18 +1,28 @@
 
 import React from 'react';
-import { withRouter, Route } from 'react-router-dom';
+import { withRouter, Route, Redirect } from 'react-router-dom';
+import { MainLayout } from './pages';
+import {routerconfig} from './config';
 
-import { Layout, Settings, Contacts, Home } from './pages';
-
-const Main = withRouter(props => <Layout {...props} />);
+const Main = withRouter(props => <MainLayout {...props} />);
 
 export default () => {
     /* eslint-disable */
+    debugger;
     return (
         <Main>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/contacts" component={Contacts} />
-            <Route exact path="/settings" component={Settings} />
+             <Redirect exact from="/" to="/main" />
+            {
+                routerconfig.map(item => {
+                    return (
+                        <Route
+                            key={item.key}
+                            path={item.path}
+                            component={item.component}
+                        />
+                    )
+                })
+            } 
         </Main>
     );
     /* eslint-enable */

@@ -481,15 +481,15 @@ function createMenu() {
 
 const createMainWindow = () => {
     var mainWindowState = windowStateKeeper({
-        defaultWidth: 745,
-        defaultHeight: 500,
+        defaultWidth: 1000,
+        defaultHeight: 700,
     });
 
     mainWindow = new BrowserWindow({
         x: mainWindowState.x,
         y: mainWindowState.y,
-        minWidth: 745,
-        minHeight: 450,
+        minWidth: 1000,
+        minHeight: 700,
         vibrancy: 'medium-light',
         transparent: true,
         titleBarStyle: 'hidden-inset',
@@ -502,7 +502,7 @@ const createMainWindow = () => {
         icon
     });
 
-    mainWindow.setSize(350, 460);
+    // mainWindow.setSize(745, 460);
     mainWindow.loadURL(
         `file://${__dirname}/src/index.html`
     );
