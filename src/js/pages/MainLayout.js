@@ -13,13 +13,12 @@ const { SubMenu } = Menu;
 @inject(stores => ({
     isGlobalLoaded: () => stores.global.pollutanttype.length === 0,
     loadPollutantType: stores.global.loadPollutantType,
-    loadPointList: stores.monitorpoint.loadPointList,
 }))
 @observer
 export default class MainLayout extends Component {
     componentDidMount() {
         this.props.loadPollutantType();
-        this.props.loadPointList();
+        this.props.history.push('main');
     }
     /**
    * get SubMenu or Item

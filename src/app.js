@@ -10,7 +10,9 @@ import './assets/fonts/icomoon/style.css';
 import 'utils/albumcolors';
 import getRoutes from './js/routes';
 import stores from './js/stores';
-
+const app = require('electron').remote.app;
+const path = require('path');
+window.db = path.join(app.getPath('userData'), 'monitor.db');
 ElectronCookies.enable({
     origin: 'https://wx.qq.com',
 });
@@ -36,7 +38,7 @@ class App extends Component {
         ipcRenderer.on('hide-tray', () => {
             stores.settings.setShowOnTray(false);
         });
-
+        // navigator.history.push('/');
         // Chat with user
         ipcRenderer.on('message-chatto', (event, args) => {
             var user = stores.contacts.memberList.find(e => e.UserName === args.id);
@@ -140,7 +142,6 @@ class App extends Component {
         );
     }
 }
-
 render(
     <App />,
     document.getElementById('root')

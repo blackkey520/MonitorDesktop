@@ -21,7 +21,7 @@ module.exports = webpackMerge(baseConfig, {
 
     plugins: [
         // Minify the output
-        new MinifyPlugin(),
+        // new MinifyPlugin(),
 
         // NODE_ENV should be production so that modules do not perform certain development checks
         new webpack.DefinePlugin({

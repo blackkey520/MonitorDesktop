@@ -12,11 +12,15 @@ import { observer, inject } from 'mobx-react';
 import styles from './style.css';
 
 @inject(stores => ({
-    pointlist: stores.monitorpoint.pointlist,
+    pointlist: stores.monitorpoint.pointlist.slice(0),
     loading: stores.monitorpoint.loading,
+    loadPointList: stores.monitorpoint.loadPointList,
 }))
 @observer
 class DashBoard extends Component {
+    componentDidMount() {
+        this.props.loadPointList();
+    }
     render() {
         const { pointlist, loading } = this.props;
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight;

@@ -46,6 +46,10 @@ module.exports = webpackMerge(baseConfig, {
                 to: config.dist,
             },
             {
+                from: `${path.resolve(__dirname, '../DBOpration')}/**/*`,
+                to: config.dist,
+            },
+            {
                 from: path.resolve(__dirname, '../package.json'),
                 to: config.dist,
             },

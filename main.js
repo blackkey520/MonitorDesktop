@@ -6,8 +6,9 @@ import windowStateKeeper from 'electron-window-state';
 import AutoLaunch from 'auto-launch';
 import { autoUpdater } from 'electron-updater';
 import axios from 'axios';
-
 import pkg from './package.json';
+
+const DBOpration = require('./DBOpration');
 
 let forceQuit = false;
 let downloading = false;
@@ -501,11 +502,17 @@ const createMainWindow = () => {
         frame: !isWin,
         icon
     });
+    DBOpration.initDb(app.getPath('userData'), () => {
+        mainWindow.loadURL(
+            `file://${__dirname}/src/index.html`
+        );
+        mainWindow.toggleDevTools();
+    }
+        // Load a DOM stub here. See renderer.js for the fully composed DOM.
+
+    );
 
     // mainWindow.setSize(745, 460);
-    mainWindow.loadURL(
-        `file://${__dirname}/src/index.html`
-    );
 
     mainWindow.webContents.on('did-finish-load', () => {
         try {

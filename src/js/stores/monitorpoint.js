@@ -18,6 +18,9 @@ class MonitorPoint {
                     pageSize: 10000
                 }
             });
+            response.data.data.map((item, key) => {
+                item.key = key;
+            });
             if (response.data.requstresult === '1') {
                 self.pointlist = response.data.data;
             } else {

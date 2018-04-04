@@ -15,6 +15,8 @@ import snackbar from './snackbar';
 import confirmImagePaste from './confirmImagePaste';
 import global from './global';
 import monitorpoint from './monitorpoint';
+import monitordata from './monitordata';
+import socketclient from './socketclient';
 
 const stores = {
     session,
@@ -33,6 +35,8 @@ const stores = {
     confirmImagePaste,
     global,
     monitorpoint,
+    monitordata,
+    socketclient,
 };
 
 export default stores;

@@ -10,6 +10,7 @@ export const menus = [
     }, {
         name: '测试',
         icon: 'form',
+        path: 'test',
         children: [{
             name: '通讯测试',
             path: '/test/sockettest',
@@ -21,6 +22,7 @@ export const menus = [
     {
         name: '设置',
         icon: 'table',
+        path: 'setting',
         children: [{
             name: '设定1',
             path: '/setting/setting1',

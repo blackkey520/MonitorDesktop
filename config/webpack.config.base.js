@@ -1,7 +1,7 @@
 
 import path from 'path';
 import config from './index';
-
+const {resolve} = require('path');
 export default {
 
     module: {
@@ -128,12 +128,13 @@ export default {
     },
 
     resolve: {
-        extensions: ['.js', '.jsx', '.json', '.less'],
+        extensions: ['.js', '.jsx', '.json', '.less', '.sql'],
         alias: {
             components: path.join(config.client, 'js/components/'),
             utils: path.join(config.client, 'js/utils/'),
             images: path.join(config.client, 'assets/images/'),
             fonts: path.join(config.client, 'assets/fonts/'),
+            DBOpration: resolve(__dirname, '../DBOpration/')
         },
     },
 };
