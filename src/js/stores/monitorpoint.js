@@ -1,6 +1,6 @@
 import { observable, action } from 'mobx';
 import axios from 'axios';
-import {config} from '../config';
+import setting from '../stores/setting';
 import global from '../stores/global';
 import { message } from 'antd';
 
@@ -10,7 +10,7 @@ class MonitorPoint {
     @action async loadPointList() {
         try {
             self.loading = true;
-            let url = config.httpaddress + '/rest/OutputAsPointApi/GetPointsByPollutantType?authorCode=48f3889c-af8d-401f-ada2-c383031af92d';
+            let url = setting.globalsetting.httpaddress + '/rest/OutputAsPointApi/GetPointsByPollutantType?authorCode=48f3889c-af8d-401f-ada2-c383031af92d';
             let response = await axios.get(url, {
                 params: {
                     pollutantType: global.pollutanttype[0].ID,

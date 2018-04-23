@@ -1,7 +1,7 @@
 
 import path from 'path';
 import webpack from 'webpack';
-import MinifyPlugin from 'babel-minify-webpack-plugin';
+// import MinifyPlugin from 'babel-minify-webpack-plugin';
 import config from './index';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import CopyWebpackPlugin from 'copy-webpack-plugin';
@@ -19,12 +19,12 @@ module.exports = webpackMerge(baseConfig, {
 
     output: {
         path: config.dist,
-        filename: 'app.[hash].js'
+        filename: 'app.js'
     },
     plugins: [
         // https://github.com/webpack/webpack/issues/2545
         // Use babel-minify-webpack-plugin minify code
-        new MinifyPlugin(),
+        // new MinifyPlugin(),
 
         // https://webpack.github.io/docs/list-of-plugins.html#occurrenceorderplugin
         // https://github.com/webpack/webpack/issues/864
@@ -46,12 +46,12 @@ module.exports = webpackMerge(baseConfig, {
                 to: config.dist,
             },
             {
-                from: `${path.resolve(__dirname, '../DBOpration')}/**/*`,
+                from: path.resolve(__dirname, '../package.json'),
                 to: config.dist,
             },
             {
-                from: path.resolve(__dirname, '../package.json'),
-                to: config.dist,
+                from: path.resolve(__dirname, '../src/dev.html'),
+                to: `${config.dist}/src`,
             },
         ]),
 
@@ -59,7 +59,6 @@ module.exports = webpackMerge(baseConfig, {
             filename: `${config.dist}/src/index.html`,
             template: './src/index.html',
             inject: 'body',
-            hash: true,
             minify: {
                 collapseWhitespace: true
             }

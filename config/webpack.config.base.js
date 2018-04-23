@@ -134,7 +134,8 @@ export default {
             utils: path.join(config.client, 'js/utils/'),
             images: path.join(config.client, 'assets/images/'),
             fonts: path.join(config.client, 'assets/fonts/'),
-            DBOpration: resolve(__dirname, '../DBOpration/')
+            'dbopration': resolve(__dirname, '../DBOpration/'),
+            'shared-md': resolve(__dirname, '../shared/')
         },
     },
 };

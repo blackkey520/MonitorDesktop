@@ -1,12 +1,16 @@
 import DashBoard from './pages/DashBoard';
 import SocketTest from './pages/SocketTest';
 import DataBase from './pages/DataBase';
-
+import Terminal from './pages/Terminal';
 export const menus = [
     {
         name: '监控面版',
         icon: 'dashboard',
         path: '/main',
+    }, {
+        name: '控制台',
+        icon: 'code',
+        path: '/console/terminal',
     }, {
         name: '测试',
         icon: 'form',
@@ -53,6 +57,12 @@ export const routerconfig = [
         component: DataBase
     },
     {
+        key: '/console/terminal',
+        name: '控制台',
+        path: '/console/terminal',
+        component: Terminal
+    },
+    {
         key: '/setting/setting1',
         name: '设置1',
         path: '/setting/setting1',
@@ -71,11 +81,3 @@ export const routerconfig = [
         component: DataBase
     }
 ];
-export const config = {
-    name: '智能采集终端',
-    logindesc: 'SDL 您身边的环境污染分析专家',
-    prefix: 'monitorOnline',
-    footerText: '智能采集终端   2018 lee',
-    logo: './assets/images/sdl.png',
-    httpaddress: 'http://172.16.12.133:4061/',
-};

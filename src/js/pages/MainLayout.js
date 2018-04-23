@@ -1,25 +1,38 @@
 
 import React, { Component } from 'react';
 import { observer, inject } from 'mobx-react';
-import { Layout, Menu, Icon } from 'antd';
+import { Layout, Menu, Icon, Modal } from 'antd';
 
-import {config, menus} from '../config';
+import { menus } from '../config';
 import classes from './MainLayout.css';
 import SplashScreen from './SplashScreen';
-
+import { ipcRenderer } from 'electron';
+const confirm = Modal.confirm;
 const { Header, Content, Footer } = Layout;
-const { SubMenu } = Menu;
+const { SubMenu, Item } = Menu;
 
 @inject(stores => ({
     isGlobalLoaded: () => stores.global.pollutanttype.length === 0,
+    initDatabase: stores.global.initDatabase,
     loadPollutantType: stores.global.loadPollutantType,
+    globalsetting: stores.setting.globalsetting,
+    init: stores.setting.init,
+    addConsoleLog: stores.global.addConsoleLog
 }))
 @observer
 export default class MainLayout extends Component {
-    componentDidMount() {
-        this.props.loadPollutantType();
+    async componentWillMount() {
+        ipcRenderer.on('main-msg', (event, args) => {
+            this.props.addConsoleLog(args);
+        });
+        await this.props.initDatabase();
+        await this.props.init();
+    }
+    async componentDidMount() {
+        await this.props.loadPollutantType();
         this.props.history.push('main');
     }
+
     /**
    * get SubMenu or Item
    */
@@ -43,11 +56,11 @@ export default class MainLayout extends Component {
           );
       } else {
           return (
-              <Menu.Item key={item.path}>
+              <Item key={item.path}>
                   <a onClick={() => {
                       _this.props.history.push(item.path);
                   }}>{item.name}</a>
-              </Menu.Item>
+              </Item>
           );
       }
   }
@@ -66,22 +79,52 @@ export default class MainLayout extends Component {
           })
           .filter(item => !!item);
   }
+
   render() {
-      let { isGlobalLoaded } = this.props;
+      let { isGlobalLoaded, globalsetting } = this.props;
       let isgl = isGlobalLoaded();
-      if (isgl) {
+      if (isgl || !globalsetting) {
           return <SplashScreen />;
       }
       return (
           <Layout className="layout">
               <Header className={classes.header}>
                   <div className={classes.logo}>
-                      <img src={config.logo} alt="logo" />
-                      <h1>{config.name}</h1>
+                      <img src={globalsetting.logo} alt="logo" />
+                      <h1>{globalsetting.bannertext}</h1>
                   </div>
                   <div className={classes.menu} >
-                      <div><Icon type="notification" style={{ fontSize: 16, color: '#fff' }} /></div>
-                      <div><Icon type="bars" style={{ fontSize: 16, color: '#fff' }} /></div>
+                      <div
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                              ipcRenderer.send('window-min');
+                          }}
+                      ><Icon type="minus" style={{ fontSize: 16, color: '#fff' }} />
+                      </div>
+                      <div
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                              ipcRenderer.send('window-max');
+                          }}
+                      ><Icon type="laptop" style={{ fontSize: 16, color: '#fff' }} />
+                      </div>
+                      <div
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                              confirm({
+                                  title: '您确定要退出程序吗？',
+                                  content: '选择否程序将隐藏到托盘中',
+                                  okText: '是',
+                                  cancelText: '否',
+                                  onOk() {
+                                      ipcRenderer.send('window-close');
+                                  },
+                                  onCancel() {
+                                      ipcRenderer.send('window-hide');
+                                  },
+                              });
+                          }}><Icon type="close" style={{ fontSize: 16, color: '#fff' }} />
+                      </div>
                   </div>
                   <Menu
                       mode="horizontal"
@@ -98,7 +141,7 @@ export default class MainLayout extends Component {
                   </div>
               </Content>
               <Footer className={classes.footer}>
-                  {config.footerText}
+                  {globalsetting.footertext}
               </Footer>
           </Layout>
 

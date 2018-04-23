@@ -26,11 +26,11 @@ class DataBase extends Component {
         const SCREEN_HEIGHT = document.querySelector('body').offsetHeight;
         const columns = [{
             title: '监测时间',
-            dataIndex: 'MonitorTime',
+            dataIndex: 'AnalyticsTime',
             width: 120,
         }, {
             title: '污染物',
-            dataIndex: 'PollutantCode',
+            dataIndex: 'PollutantName',
             width: 120,
         }, {
             title: '数值',

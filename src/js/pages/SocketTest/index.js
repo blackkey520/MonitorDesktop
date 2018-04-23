@@ -5,10 +5,11 @@
 import React, { Component } from 'react';
 import { Tabs, Input, Button, Divider, Layout, List } from 'antd';
 import { observer, inject } from 'mobx-react';
+import { ipcRenderer } from 'electron';
 const TabPane = Tabs.TabPane;
 const { TextArea } = Input;
 const { Content, Sider } = Layout;
-
+const { Item } = List;
 @inject(stores => ({
     ip: stores.socketclient.ip,
     onipchange: (event) => { stores.socketclient.ip = event.target.value; },
@@ -24,6 +25,11 @@ const { Content, Sider } = Layout;
 }))
 @observer
 class SocketTest extends Component {
+    doreadfile=() => {
+        ipcRenderer.send('readfile-test', {
+            filepath: 'C:\\Users\\NeilyoLee\\Desktop\\QuantReport_ISTD_ResultsComplete_B_06_00_Ch013_21.xlsx',
+        });
+    }
     render() {
         return (
             <div
@@ -60,7 +66,9 @@ class SocketTest extends Component {
                     <TabPane tab="服务器" key="2">
                         <div><Input style={{width: 170}} placeholder="ip地址" />
                             <Input style={{width: 170, marginLeft: 5}} placeholder="端口号" />
-                            <Button style={{marginLeft: 5}} type="primary">监听</Button></div>
+                            <Button style={{marginLeft: 5}} onClick={() => {
+                                this.doreadfile();
+                            }} type="primary">监听</Button></div>
                         <Layout style={{ background: '#fff', marginTop: 10 }}>
                             <Sider style={{ background: '#fff' }}><List
                                 header={<div>连接</div>}
@@ -72,7 +80,7 @@ class SocketTest extends Component {
                                     '187.32.2.1',
                                     '187.32.2.1',
                                 ]}
-                                renderItem={item => (<List.Item>{item}</List.Item>)}
+                                renderItem={item => (<Item>{item}</Item>)}
                             /></Sider>
                             <Content> <Divider orientation="left">发送区</Divider>
                                 <div>
@@ -83,7 +91,9 @@ class SocketTest extends Component {
                                 <Divider orientation="left">接收区</Divider>
                                 <div title="接收区">
                                     <div>
-                                        <Button style={{marginLeft: 5}}>清空</Button></div>
+                                        <Button onClick={() => {
+                                            this.doreadfile();
+                                        }} style={{marginLeft: 5}}>清空</Button></div>
                                     <TextArea rows={6} style={{marginTop: 10}} />
                                 </div></Content>
                         </Layout>

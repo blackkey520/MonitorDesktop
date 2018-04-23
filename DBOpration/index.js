@@ -3,7 +3,8 @@
 const path = require('path');
 const fs = require('fs');
 const SQL = require('sql.js');
-
+const remote = require('electron').remote;
+const app = require('electron').app;
 /*
   SQL.js returns a compact object listing the columns separately from the
   values or rows of data. This function joins the column names and
@@ -32,18 +33,7 @@ let _rowsFromSqlDataObject = function(object) {
     }
     return data;
 };
-
-/*
-    Return a string of placeholders for use in a prepared statement.
-  */
-// let _placeHoldersString = function(length) {
-//     let places = '';
-//     for (let i = 1; i <= length; i++) {
-//         places += '?, ';
-//     }
-//     return /(.*),/.exec(places)[1];
-// };
-
+SQL.DBPath = remote ? path.join(remote.app.getPath('userData'), 'monitor.db') : path.join(app.getPath('userData'), 'monitor.db');
 SQL.dbOpen = function(databaseFileName) {
     try {
         return new SQL.Database(fs.readFileSync(databaseFileName));
@@ -78,9 +68,7 @@ module.exports.initDb = function(appPath, callback) {
     let createDb = function(dbPath) {
     // Create a database.
         let db = new SQL.Database();
-        let query = fs.readFileSync(
-            path.join(__dirname, 'db', 'schema.sql'), 'utf8');
-        let result = db.exec(query);
+        let result = db.exec('CREATE TABLE "MonitorData" ("AnalyticsTime" TEXT(255,0) NOT NULL,"DataFileName" TEXT(255,0) NOT NULL,"SampleName" TEXT(255,0) NOT NULL,"SampleType" TEXT(255,0) NOT NULL,"CollectFun" TEXT(255,0) NOT NULL,"PollutantName" TEXT(255,0) NOT NULL,"MonitorValue" REAL(1000,10) NOT NULL,"MonitorData" REAL(1000,10) NOT NULL,"Flag" TEXT(255,0) NOT NULL,PRIMARY KEY ("AnalyticsTime", "PollutantName") ); CREATE INDEX "MonitorTime_index" ON MonitorData ("AnalyticsTime" COLLATE NOCASE DESC); CREATE TABLE "DataFile" ("AnalyticsTime" TEXT(255,0) NOT NULL PRIMARY KEY,"DataFileName" TEXT(255,0) NOT NULL,"SampleName" TEXT(255,0) NOT NULL,"SampleType" TEXT(255,0) NOT NULL,"CollectFun" TEXT(255,0) NOT NULL,"IsSuccess" INTEGER NOT NULL); CREATE INDEX "DataFile_index" ON DataFile ("AnalyticsTime" COLLATE NOCASE DESC)');
         if (Object.keys(result).length === 0
       && typeof result.constructor === 'function'
       && SQL.dbClose(db, dbPath)) {
@@ -107,16 +95,16 @@ module.exports.initDb = function(appPath, callback) {
         } else {
             console.log('The database has', tableCount, 'tables.');
         }
-        if (typeof callback === 'function') {
-            callback();
-        }
+    }
+    if (typeof callback === 'function') {
+        callback();
     }
 };
 /*
   Populates the People List.
 */
 module.exports.QueryData = function(sql) {
-    let db = SQL.dbOpen(window.db);
+    let db = SQL.dbOpen(SQL.DBPath);
     if (db !== null) {
         try {
             let row = db.exec(sql);
@@ -127,7 +115,24 @@ module.exports.QueryData = function(sql) {
         } catch (error) {
             console.log('model.getPeople', error.message);
         } finally {
-            SQL.dbClose(db, window.db);
+            SQL.dbClose(db, SQL.DBPath);
+        }
+    }
+};
+module.exports.SaveData = function(sql, values) {
+    let db = SQL.dbOpen(SQL.DBPath);
+    if (db !== null) {
+        let statement = db.prepare(sql);
+        try {
+            if (statement.run(values)) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (error) {
+            console.log('model.saveFormData', error.message);
+        } finally {
+            SQL.dbClose(db, SQL.DBPath);
         }
     }
 };
